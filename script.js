@@ -14,28 +14,82 @@ function addTodo() {
 
 // 保存した内容をテーブルに出力
 function displayTodo() {
+  const radioValue = document.getElementById('status-list').status.value;
   const fragment = document.createDocumentFragment();
-  tasks.forEach((task, index) => {
-    const tr = document.createElement('tr');
-    const td1 = document.createElement('td');
-    td1.textContent = index;
-    tr.appendChild(td1);
+  if (radioValue === 'all') {
+    // すべてのタスクを表示する
+    tasks.forEach((task, index) => {
+      const tr = document.createElement('tr');
+      const td1 = document.createElement('td');
+      td1.textContent = index;
+      tr.appendChild(td1);
 
-    const td2 = document.createElement('td');
-    td2.textContent = task.content;
-    tr.appendChild(td2);
+      const td2 = document.createElement('td');
+      td2.textContent = task.content;
+      tr.appendChild(td2);
 
-    const statusButton = generateStatusButton(task);
-    const td3 = document.createElement('td');
-    td3.appendChild(statusButton);
-    tr.appendChild(td3);
+      const statusButton = generateStatusButton(task);
+      const td3 = document.createElement('td');
+      td3.appendChild(statusButton);
+      tr.appendChild(td3);
 
-    const delButton = generateDeleteButton(index);
-    const td4 = document.createElement('td');
-    td4.appendChild(delButton);
-    tr.appendChild(td4);
-    fragment.appendChild(tr);
-  });
+      const delButton = generateDeleteButton(index);
+      const td4 = document.createElement('td');
+      td4.appendChild(delButton);
+      tr.appendChild(td4);
+      fragment.appendChild(tr);
+    });
+  } else if (radioValue === 'working') {
+    // 作業中のタスクのみ表示する
+    tasks.forEach((task, index) => {
+      if (task.status === '作業中') {
+        const tr = document.createElement('tr');
+        const td1 = document.createElement('td');
+        td1.textContent = index;
+        tr.appendChild(td1);
+
+        const td2 = document.createElement('td');
+        td2.textContent = task.content;
+        tr.appendChild(td2);
+
+        const statusButton = generateStatusButton(task);
+        const td3 = document.createElement('td');
+        td3.appendChild(statusButton);
+        tr.appendChild(td3);
+
+        const delButton = generateDeleteButton(index);
+        const td4 = document.createElement('td');
+        td4.appendChild(delButton);
+        tr.appendChild(td4);
+        fragment.appendChild(tr);
+      }
+    });
+  } else {
+      // 完了のタスクのみ表示する
+      tasks.forEach((task, index) => {
+      if (task.status === '完了') {
+        const tr = document.createElement('tr');
+        const td1 = document.createElement('td');
+        td1.textContent = index;
+        tr.appendChild(td1);
+
+        const td2 = document.createElement('td');
+        td2.textContent = task.content;
+        tr.appendChild(td2);
+
+        const statusButton = generateStatusButton(task);
+        const td3 = document.createElement('td');
+        td3.appendChild(statusButton);
+        tr.appendChild(td3);
+
+        const delButton = generateDeleteButton(index);
+        const td4 = document.createElement('td');
+        td4.appendChild(delButton);
+        tr.appendChild(td4);
+        fragment.appendChild(tr);
+      }
+    });
+  }
   const table = document.getElementById('table');
   table.innerHTML = '';
   table.appendChild(fragment);
@@ -86,3 +140,6 @@ document.getElementById('add_task').addEventListener('click', () => {
   // todoの表示更新
   displayTodo();
 });
+
+// ラジオボタンに応じてタスク表示を切り替える
+document.getElementById('status-list').addEventListener('change', () => displayTodo());
